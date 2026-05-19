@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Evals · OCBC SME Pre-Qualification</title>
+  <link rel="stylesheet" href="/static/styles.css" />
+</head>
+<body class="evals-page">
+  <header>
+    <div class="brand">
+      <span class="logo-dot"></span>
+      <span class="brand-name">OCBC SME · Pre-Qualification</span>
+      <span class="brand-tag">eval results</span>
+    </div>
+    <div class="controls">
+      <a href="/" class="evals-link">← back to chat</a>
+    </div>
+  </header>
+
+  <main class="evals-main">
+    {% if not has_results %}
+      <p class="empty">No eval results yet. Run <code>python -m evals</code> locally to generate <code>eval_results.json</code>.</p>
+    {% else %}
+      <div class="summary">
+        <h2>{{ results.summary.passed }}/{{ results.summary.total }} cases passed</h2>
+        <div class="meta">
+          ran {{ results.ran_at }} · agent <code>{{ results.model }}</code> · judge <code>{{ results.judge_model }}</code> · {{ results.elapsed_s }}s
+        </div>
+      </div>
+
+      <table class="eval-table">
+        <thead>
+          <tr>
+            <th>id</th>
+            <th>case</th>
+            <th>decision</th>
+            <th>assertions</th>
+            <th>result</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for c in results.cases %}
+            <tr class="{% if c.overall_pass %}pass{% else %}fail{% endif %}">
+              <td><code>{{ c.case_id }}</code></td>
+              <td>{{ c.label }}</td>
+              <td>
+                {% if c.final_card %}
+                  <code>{{ c.final_card.decision }}</code>
+                  {% if c.final_card.escalation_reason %}
+                    <div class="reason">{{ c.final_card.escalation_reason }}</div>
+                  {% endif %}
+                {% else %}
+                  <em>no final card</em>
+                {% endif %}
+              </td>
+              <td>
+                <ul class="assertions">
+                  {% for a in c.assertions %}
+                    <li class="{% if a.score == 1 %}ok{% else %}bad{% endif %}">
+                      <span class="dot"></span>
+                      <span class="text">{{ a.text }}</span>
+                      <span class="why">{{ a.reason }}</span>
+                    </li>
+                  {% endfor %}
+                </ul>
+              </td>
+              <td class="result-cell">{% if c.overall_pass %}PASS{% else %}FAIL{% endif %}</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    {% endif %}
+  </main>
+</body>
+</html>

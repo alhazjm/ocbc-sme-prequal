@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>OCBC SME Pre-Qualification</title>
+  <link rel="stylesheet" href="/static/styles.css" />
+</head>
+<body>
+  <header>
+    <div class="brand">
+      <span class="logo-dot"></span>
+      <span class="brand-name">OCBC SME · Pre-Qualification</span>
+      <span class="brand-tag">demo · OpenAI Responses · gpt-5</span>
+    </div>
+    <div class="controls">
+      <label class="voice">
+        <span>Voice</span>
+        <select id="voice">
+          <option value="casual">conversational</option>
+          <option value="formal">OCBC formal</option>
+        </select>
+      </label>
+      <button id="reset" type="button" title="Start a new conversation">reset</button>
+      <a href="/evals" target="_blank" rel="noopener" class="evals-link">view evals →</a>
+    </div>
+  </header>
+
+  <main>
+    <section class="chat">
+      <div id="messages" class="messages">
+        <div class="msg agent welcome">Hi — I can help you check if your business pre-qualifies for an OCBC SME loan. Share what you do, how long you've been operating, roughly your monthly revenue, what the loan is for, and how much you'd like to borrow. I'll surface the products that fit and tell you what you'd need to apply.</div>
+      </div>
+      <form id="chat-form" autocomplete="off">
+        <input id="input" type="text" placeholder="Tell me about your business and what you're looking to borrow…" autofocus />
+        <button type="submit" id="send">Send</button>
+      </form>
+      <div class="personas">
+        <span class="personas-label">Try as:</span>
+        {% for p in personas %}
+          <button type="button" class="persona" data-starter="{{ p.starter | e }}">{{ p.label }}</button>
+        {% endfor %}
+      </div>
+      <div class="footer">
+        <span id="usage">—</span>
+        <span id="latency">—</span>
+        <span id="status"></span>
+      </div>
+    </section>
+
+    <aside class="trace">
+      <div class="trace-header">
+        <span>agent trace</span>
+        <button type="button" id="trace-toggle" aria-expanded="true">hide</button>
+      </div>
+      <div id="trace-body" class="trace-body"></div>
+    </aside>
+  </main>
+
+  <script src="/static/chat.js"></script>
+</body>
+</html>
