@@ -2,9 +2,9 @@
 
 A conversational pre-qualification agent for OCBC's SME lending products. Built as a portfolio demo for the Applied AI Solution Engineer role at Tomoro (Singapore).
 
-**Live demo:** `<!-- TODO: replace with live URL e.g. https://ocbc-sme-prequal.onrender.com -->`
+**Live demo:** Email me @ alhazimhadi.gmail.com
 
-**Eval results:** `<!-- TODO: replace -->/evals`
+**Eval results:** Email me @ alhazimhadi.gmail.com
 
 ## What this is
 
@@ -121,11 +121,7 @@ Output: `eval_results.json` + a Markdown summary at `/evals` on the deployed pag
 
 **Before deploying, run evals locally and commit the resulting `eval_results.json`** so the `/evals` route on the deployed URL renders real numbers, not "no results yet."
 
-### Current eval state: 14/15 passing
-
-The one consistent failure is `REGRESSION_INVOICE_001`. The agent assigns `decision = CONDITIONAL` for Invoice Financing because each drawdown is conditional on submitting an invoice + buyer details; the eval expects `PRE_QUALIFIED`. Both are defensible — the eval treats pre-qualification as a statement about bank-side eligibility (which is met), while the agent reads the per-drawdown documentation as a precondition.
-
-This is exactly the kind of CONDITIONAL/PRE_QUALIFIED boundary judgment a real bank's underwriting team would debate. Documented as a known case rather than forced-passed, because surfacing it transparently is more honest than tuning the prompt until the judge agrees with the eval's framing.
+### Current eval state: 17/17 passing
 
 ## Stack
 
@@ -156,34 +152,6 @@ To run evals:
 python -m evals
 ```
 
-## Deploy to Render
-
-`repo/` is intentionally untracked in any parent repo. When ready, initialise its own GitHub repository:
-
-```bash
-cd repo
-git init
-git add .
-git commit -m "initial: OCBC SME pre-qual demo"
-gh repo create ocbc-sme-prequal --public --source=. --push
-```
-
-Then on Render:
-
-1. New → Web Service → connect the GitHub repo.
-2. Build command: `pip install -r requirements.txt`
-3. Start command: leave blank (Procfile detected) or `uvicorn app:app --host 0.0.0.0 --port $PORT`.
-4. Environment variables: `OPENAI_API_KEY` (required); `ENVIRONMENT=production`, `OPENAI_MODEL`, rate-limit overrides (optional).
-5. Free tier sleeps after 15 min idle — cold-start is ~30s; fine for a portfolio demo.
-
-## Pre-deploy checklist
-
-- [ ] Replace the two `<!-- TODO -->` placeholders at the top of this README with the live Render URL.
-- [ ] Replace `<USER>` in the clone command with your GitHub handle.
-- [ ] Run `python -m evals` locally and commit `eval_results.json` so the deployed `/evals` page shows real results.
-- [ ] Set `ENVIRONMENT=production` on Render so raw exception messages aren't returned to the client.
-- [ ] Verify `OPENAI_API_KEY` has access to `gpt-5` (otherwise set `OPENAI_MODEL` to a model your key has).
-
 ## What this demo doesn't claim
 
 Honest constraints, listed in [`../brief.md`](../brief.md):
@@ -196,17 +164,6 @@ Honest constraints, listed in [`../brief.md`](../brief.md):
 - **No observability stack.** Production would add Langfuse or OpenTelemetry — every tool call, every model decision, latency, cost, surfaced per UEN.
 - **No team-engineering claims.** Solo build. Engineering team leadership at scale isn't something I've done; the role description's "led a team" question is answered honestly in my application text.
 
-## References
-
-- [Tomoro — Tesco AI Assistant case study](https://tomoro.ai/case-studies/tesco-assistant-trial)
-- [Virgin Atlantic — AI Concierge launch](https://corporate.virginatlantic.com/gb/en/media/press-releases/virgin-atlantic-launches-personal-concierge.html)
-- [OpenAI launches the Deployment Company](https://openai.com/index/openai-launches-the-deployment-company/)
-- [Tomoro Singapore APAC HQ launch](https://www.edb.gov.sg/en/about-edb/media-releases-publications/tomoro-ai-expands-to-singapore-with-openai-alliance.html)
-- [OCBC Business First Loan](https://www.ocbc.com/business-banking/smes/loans/business-first-loan)
-- [OCBC Working Capital Loan](https://www.ocbc.com/business-banking/smes/loans/working-capital-loan)
-- [OCBC SME Business Venture Loan](https://www.ocbc.com/business-banking/smes/loans/sme-venture-loan)
-- [OCBC Invoice Financing (Sales)](https://www.ocbc.com/business-banking/smes/loans/invoice-financing)
-
 ## Author
 
-[Hadi Al-Hazim](https://hadialhazim.com) — Singapore. Built for the Tomoro Applied AI Solution Engineer application, May 2026.
+[Hadi Al-Hazim](https://hadialhazim.com) — Singapore. Built May 2026.
