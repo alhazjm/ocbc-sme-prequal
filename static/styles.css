@@ -507,16 +507,29 @@ main.collapsed { grid-template-columns: minmax(0, 1fr) 30px; }
 
 main.collapsed .trace { display: none; }
 
-/* Eval page — reset the chat-grid layout from the global `main` rule */
+/* Eval page — wraps the same .page / .intro / .page-footer pattern as home */
 .evals-page { background: var(--bg); }
-.evals-page main {
-  display: block;
-  grid-template-columns: none;
-  height: auto;
-  min-height: calc(100vh - 58px);
-  overflow: visible;
+.evals-page .intro p code,
+.evals-page .intro code {
+  font-family: var(--mono);
+  font-size: 12px;
+  background: var(--panel);
+  padding: 2px 6px;
+  border-radius: 4px;
+  border: 1px solid var(--border);
+  color: var(--text);
 }
-.evals-main { padding: 28px; max-width: 1200px; margin: 0 auto; }
+.evals-card {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  box-shadow: var(--shadow);
+  overflow: hidden;
+}
+.evals-card .eval-table {
+  border: 0;
+  border-radius: 0;
+}
 .empty { color: var(--muted); }
 .summary { margin-bottom: 24px; }
 .summary h2 { margin: 0 0 4px; font-size: 22px; color: var(--text); }

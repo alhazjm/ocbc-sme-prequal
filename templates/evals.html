@@ -4,73 +4,86 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Evals · OCBC SME Pre-Qualification</title>
-  <link rel="stylesheet" href="/static/styles.css?v=2" />
+  <link rel="stylesheet" href="/static/styles.css?v=3" />
 </head>
 <body class="evals-page">
-  <header>
-    <div class="brand">
-      <span class="logo-dot"></span>
-      <span class="brand-name">OCBC SME · Pre-Qualification</span>
-      <span class="brand-tag">eval results</span>
-    </div>
-    <div class="controls">
+  <div class="page">
+    <section class="intro">
+      <span class="chip">OCBC SME · pre-qualification demo</span>
+      <h1>Eval results</h1>
+      {% if has_results %}
+        <p>
+          <strong>{{ results.summary.passed }}/{{ results.summary.total }} cases passed.</strong>
+          Ran {{ results.ran_at }} · agent <code>{{ results.model }}</code> ·
+          judge <code>{{ results.judge_model }}</code> · {{ results.elapsed_s }}s.
+        </p>
+      {% else %}
+        <p>No eval results yet. Run <code>python -m evals</code> locally to generate <code>eval_results.json</code>.</p>
+      {% endif %}
+      <p class="tips">
+        Seventeen scripted cases — six SME fixtures, seven regression cases, four edge cases.
+        Each case is a multi-turn scripted conversation. Programmatic assertions check
+        <em>decision</em>, <em>escalation_reason</em>, and <em>forbidden_tool_calls</em>; judge
+        assertions are graded 0/1 by a second model call.
+        Overall pass = all programmatic AND all judge assertions = 1.
+      </p>
+    </section>
+
+    <div class="chat-controls">
       <a href="/" class="evals-link">← back to chat</a>
     </div>
-  </header>
 
-  <main class="evals-main">
-    {% if not has_results %}
-      <p class="empty">No eval results yet. Run <code>python -m evals</code> locally to generate <code>eval_results.json</code>.</p>
-    {% else %}
-      <div class="summary">
-        <h2>{{ results.summary.passed }}/{{ results.summary.total }} cases passed</h2>
-        <div class="meta">
-          ran {{ results.ran_at }} · agent <code>{{ results.model }}</code> · judge <code>{{ results.judge_model }}</code> · {{ results.elapsed_s }}s
-        </div>
-      </div>
-
-      <table class="eval-table">
-        <thead>
-          <tr>
-            <th>id</th>
-            <th>case</th>
-            <th>decision</th>
-            <th>assertions</th>
-            <th>result</th>
-          </tr>
-        </thead>
-        <tbody>
-          {% for c in results.cases %}
-            <tr class="{% if c.overall_pass %}pass{% else %}fail{% endif %}">
-              <td><code>{{ c.case_id }}</code></td>
-              <td>{{ c.label }}</td>
-              <td>
-                {% if c.final_card %}
-                  <code>{{ c.final_card.decision }}</code>
-                  {% if c.final_card.escalation_reason %}
-                    <div class="reason">{{ c.final_card.escalation_reason }}</div>
-                  {% endif %}
-                {% else %}
-                  <em>no final card</em>
-                {% endif %}
-              </td>
-              <td>
-                <ul class="assertions">
-                  {% for a in c.assertions %}
-                    <li class="{% if a.score == 1 %}ok{% else %}bad{% endif %}">
-                      <span class="dot"></span>
-                      <span class="text">{{ a.text }}</span>
-                      <span class="why">{{ a.reason }}</span>
-                    </li>
-                  {% endfor %}
-                </ul>
-              </td>
-              <td class="result-cell">{% if c.overall_pass %}PASS{% else %}FAIL{% endif %}</td>
+    {% if has_results %}
+      <div class="evals-card">
+        <table class="eval-table">
+          <thead>
+            <tr>
+              <th>id</th>
+              <th>case</th>
+              <th>decision</th>
+              <th>assertions</th>
+              <th>result</th>
             </tr>
-          {% endfor %}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {% for c in results.cases %}
+              <tr class="{% if c.overall_pass %}pass{% else %}fail{% endif %}">
+                <td><code>{{ c.case_id }}</code></td>
+                <td>{{ c.label }}</td>
+                <td>
+                  {% if c.final_card %}
+                    <code>{{ c.final_card.decision }}</code>
+                    {% if c.final_card.escalation_reason %}
+                      <div class="reason">{{ c.final_card.escalation_reason }}</div>
+                    {% endif %}
+                  {% else %}
+                    <em>no final card</em>
+                  {% endif %}
+                </td>
+                <td>
+                  <ul class="assertions">
+                    {% for a in c.assertions %}
+                      <li class="{% if a.score == 1 %}ok{% else %}bad{% endif %}">
+                        <span class="dot"></span>
+                        <span class="text">{{ a.text }}</span>
+                        <span class="why">{{ a.reason }}</span>
+                      </li>
+                    {% endfor %}
+                  </ul>
+                </td>
+                <td class="result-cell">{% if c.overall_pass %}PASS{% else %}FAIL{% endif %}</td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
     {% endif %}
-  </main>
+
+    <footer class="page-footer">
+      <span>Built by Hadi Al-Hazim with Codex + Claude Code</span>
+      <span class="sep">·</span>
+      <a href="https://hadialhazim.com" target="_blank" rel="noopener">hadialhazim.com</a>
+    </footer>
+  </div>
 </body>
 </html>
