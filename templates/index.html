@@ -7,13 +7,39 @@
   <link rel="stylesheet" href="/static/styles.css" />
 </head>
 <body>
-  <header>
-    <div class="brand">
-      <span class="logo-dot"></span>
-      <span class="brand-name">OCBC SME · Pre-Qualification</span>
-      <span class="brand-tag">demo · OpenAI Responses · gpt-5</span>
-    </div>
-    <div class="controls">
+  <div class="page">
+    <section class="intro">
+      <span class="chip">OCBC SME · pre-qualification demo</span>
+      <h1>A conversational pre-qualification agent for OCBC's SME loan products</h1>
+      <p>
+        This demo maps a business to a Singapore SSIC code
+        → finds an OCBC SME product that fits
+        → checks eligibility on years in operation, revenue and loan amount
+        → presents the outcome with an audit trail.
+        Read the <a href="https://github.com/alhazjm/ocbc-sme-prequal" target="_blank" rel="noopener">source on GitHub</a>
+        or the <a href="/evals" target="_blank" rel="noopener">eval results</a>.
+      </p>
+      <p>
+        Under the hood: four tools, 17 scripted evals, and a deterministic human-in-the-loop
+        wrapper that intercepts illegal categories, foreign entities, advice-seeking, and other
+        hard cases before the model runs.
+      </p>
+      <p class="tips">
+        <strong>Tips.</strong>
+        Click a persona below the chat input to start with a sample business — it pre-fills your
+        first message; edit or send as-is. The agent will ask you for anything it needs. The
+        right-rail trace panel shows every tool call, every reasoning step, and any escalation the
+        deterministic wrapper fires. Click <em>reset</em> above the chat to start a new conversation.
+        Switch <em>voice</em> between OCBC-formal and conversational to see the same decision
+        rendered in different brand voices.
+      </p>
+      <p class="tips">
+        <em>Disclaimer:</em> this is a portfolio demo running on mock product data. Real terms come
+        from OCBC's credit assessment, not this chatbot.
+      </p>
+    </section>
+
+    <div class="chat-controls">
       <label class="voice">
         <span>Voice</span>
         <select id="voice">
@@ -24,38 +50,44 @@
       <button id="reset" type="button" title="Start a new conversation">reset</button>
       <a href="/evals" target="_blank" rel="noopener" class="evals-link">view evals →</a>
     </div>
-  </header>
 
-  <main>
-    <section class="chat">
-      <div id="messages" class="messages">
-        <div class="msg agent welcome">Hi — I can help you check if your business pre-qualifies for an OCBC SME loan. Share what you do, how long you've been operating, roughly your monthly revenue, what the loan is for, and how much you'd like to borrow. I'll surface the products that fit and tell you what you'd need to apply.</div>
-      </div>
-      <form id="chat-form" autocomplete="off">
-        <input id="input" type="text" placeholder="Tell me about your business and what you're looking to borrow…" autofocus />
-        <button type="submit" id="send">Send</button>
-      </form>
-      <div class="personas">
-        <span class="personas-label">Try as:</span>
-        {% for p in personas %}
-          <button type="button" class="persona" data-starter="{{ p.starter | e }}">{{ p.label }}</button>
-        {% endfor %}
-      </div>
-      <div class="footer">
-        <span id="usage">—</span>
-        <span id="latency">—</span>
-        <span id="status"></span>
-      </div>
-    </section>
+    <main>
+      <section class="chat">
+        <div id="messages" class="messages">
+          <div class="msg agent welcome">Hi — I can help you check if your business pre-qualifies for an OCBC SME loan. Share what you do, how long you've been operating, roughly your monthly revenue, what the loan is for, and how much you'd like to borrow. I'll surface the products that fit and tell you what you'd need to apply.</div>
+        </div>
+        <form id="chat-form" autocomplete="off">
+          <input id="input" type="text" placeholder="Tell me about your business and what you're looking to borrow…" autofocus />
+          <button type="submit" id="send">Send</button>
+        </form>
+        <div class="personas">
+          <span class="personas-label">Try as:</span>
+          {% for p in personas %}
+            <button type="button" class="persona" data-starter="{{ p.starter | e }}">{{ p.label }}</button>
+          {% endfor %}
+        </div>
+        <div class="footer">
+          <span id="usage">—</span>
+          <span id="latency">—</span>
+          <span id="status"></span>
+        </div>
+      </section>
 
-    <aside class="trace">
-      <div class="trace-header">
-        <span>agent trace</span>
-        <button type="button" id="trace-toggle" aria-expanded="true">hide</button>
-      </div>
-      <div id="trace-body" class="trace-body"></div>
-    </aside>
-  </main>
+      <aside class="trace">
+        <div class="trace-header">
+          <span>agent trace</span>
+          <button type="button" id="trace-toggle" aria-expanded="true">hide</button>
+        </div>
+        <div id="trace-body" class="trace-body"></div>
+      </aside>
+    </main>
+
+    <footer class="page-footer">
+      <span>Built by Hadi Al-Hazim with Codex + Claude Code</span>
+      <span class="sep">·</span>
+      <a href="https://hadialhazim.com" target="_blank" rel="noopener">hadialhazim.com</a>
+    </footer>
+  </div>
 
   <script src="/static/chat.js"></script>
 </body>
