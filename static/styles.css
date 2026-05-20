@@ -21,7 +21,7 @@
 
 * { box-sizing: border-box; }
 
-html, body { height: 100%; }
+html, body { min-height: 100%; }
 body {
   margin: 0;
   background: var(--bg);
@@ -31,24 +31,67 @@ body {
   line-height: 1.55;
 }
 
-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 14px 24px;
+.page {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 28px 24px 64px;
+}
+
+.intro {
+  margin-bottom: 24px;
+  padding-bottom: 28px;
   border-bottom: 1px solid var(--border);
-  background: var(--panel);
 }
-
-.brand { display: flex; align-items: center; gap: 10px; }
-.logo-dot {
-  width: 12px; height: 12px; border-radius: 3px;
-  background: var(--accent);
+.intro .chip {
+  display: inline-block;
+  background: var(--accent-soft);
+  color: var(--accent);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.6px;
+  text-transform: uppercase;
+  padding: 4px 12px;
+  border-radius: 999px;
+  margin-bottom: 14px;
 }
-.brand-name { font-weight: 600; letter-spacing: 0.2px; color: var(--text); }
-.brand-tag { color: var(--muted); font-size: 12px; font-family: var(--mono); }
+.intro h1 {
+  margin: 0 0 14px;
+  font-size: 28px;
+  line-height: 1.25;
+  font-weight: 700;
+  color: var(--text);
+}
+.intro p {
+  margin: 0 0 12px;
+  color: var(--text);
+  line-height: 1.6;
+  font-size: 15px;
+}
+.intro p.tips {
+  color: var(--muted);
+  font-size: 14px;
+}
+.intro p.tips strong { color: var(--text); }
+.intro p.tips em { font-style: normal; font-family: var(--mono); font-size: 13px; background: var(--panel); padding: 1px 5px; border: 1px solid var(--border); border-radius: 4px; color: var(--text); }
+.intro a {
+  color: var(--accent);
+  text-decoration: none;
+  border-bottom: 1px dashed var(--accent);
+}
+.intro a:hover { background: var(--accent-soft); }
 
-.controls { display: flex; align-items: center; gap: 14px; }
+/* Control bar that sits just above the chat card (voice, reset, view evals).
+   Replaces the old top header strip. */
+.chat-controls {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 10px;
+  padding: 0 2px;
+}
+.chat-controls .voice { margin-right: 4px; }
+.chat-controls .evals-link { margin-left: auto; }
+
 .voice { display: flex; align-items: center; gap: 6px; color: var(--muted); font-size: 13px; }
 .voice select {
   background: var(--panel);
@@ -82,10 +125,14 @@ header {
 
 main {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 380px;
-  height: calc(100vh - 58px);
+  grid-template-columns: minmax(0, 1fr) 360px;
+  height: 640px;
   min-height: 0;
   overflow: hidden;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  box-shadow: var(--shadow);
 }
 main.collapsed { grid-template-columns: minmax(0, 1fr) 30px; }
 
@@ -96,6 +143,9 @@ main.collapsed { grid-template-columns: minmax(0, 1fr) 30px; }
   min-width: 0;
   min-height: 0;
   background: var(--bg);
+  border-top-left-radius: 12px;
+  border-bottom-left-radius: 12px;
+  overflow: hidden;
 }
 
 .messages {
@@ -400,6 +450,9 @@ main.collapsed { grid-template-columns: minmax(0, 1fr) 30px; }
   flex-direction: column;
   min-width: 0;
   min-height: 0;
+  border-top-right-radius: 12px;
+  border-bottom-right-radius: 12px;
+  overflow: hidden;
 }
 .trace-header {
   flex: 0 0 auto;
@@ -609,8 +662,31 @@ body.conversation-locked #input::placeholder {
   color: var(--muted);
 }
 
+/* Page footer — small attribution row below the chat card */
+.page-footer {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin-top: 24px;
+  padding-top: 16px;
+  border-top: 1px solid var(--border);
+  font-size: 13px;
+  color: var(--muted);
+}
+.page-footer a {
+  color: var(--muted);
+  text-decoration: none;
+  border-bottom: 1px dashed var(--border-strong);
+}
+.page-footer a:hover { color: var(--accent); border-bottom-color: var(--accent); }
+.page-footer .sep { opacity: 0.5; }
+
 @media (max-width: 900px) {
-  main { grid-template-columns: 1fr; height: auto; min-height: calc(100vh - 58px); overflow: visible; }
-  .chat { min-height: 60vh; }
-  .trace { border-top: 1px solid var(--border); max-height: 50vh; }
+  .page { padding: 20px 16px 48px; }
+  .intro h1 { font-size: 22px; }
+  .chat-controls { flex-wrap: wrap; }
+  main { grid-template-columns: 1fr; height: auto; overflow: visible; }
+  .chat { min-height: 60vh; border-right: 0; border-bottom: 1px solid var(--border); border-radius: 12px 12px 0 0; }
+  .trace { max-height: 50vh; border-radius: 0 0 12px 12px; }
 }
