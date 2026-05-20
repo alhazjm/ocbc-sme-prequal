@@ -21,11 +21,11 @@
         <p>No eval results yet. Run <code>python -m evals</code> locally to generate <code>eval_results.json</code>.</p>
       {% endif %}
       <p class="tips">
-        Seventeen scripted cases — six SME fixtures, seven regression cases, four edge cases.
-        Each case is a multi-turn scripted conversation. Programmatic assertions check
-        <em>decision</em>, <em>escalation_reason</em>, and <em>forbidden_tool_calls</em>; judge
-        assertions are graded 0/1 by a second model call.
-        Overall pass = all programmatic AND all judge assertions = 1.
+        Seventeen scripted conversations test the chatbot — six clean SMEs, seven regression
+        guards, four edge cases (illegal businesses, foreign entities, advice questions,
+        implausible numbers). A case passes only when every check passes: the strict code checks
+        (right decision? right escalation reason?) and the subjective quality checks graded by a
+        second AI model (did the reasoning explain the threshold?).
       </p>
     </section>
 
